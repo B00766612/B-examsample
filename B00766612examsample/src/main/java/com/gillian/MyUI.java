@@ -26,14 +26,14 @@ public class MyUI extends UI {
         final VerticalLayout layout = new VerticalLayout();
 //********************Database************************************* */
         //add connection String edit relevant
-        String connectionString = "jdbc:sqlserver://://b00766612server.database.windows.net:1433;" + 
-        "database=B00766612-examsample;" + 
-        "user=examsampledatab@b00766612server;" + 
-        "password=Clouddev01;" + 
-        "encrypt=true;" + 
-        "trustServerCertificate=false;" + 
-        "hostNameInCertificate=*.database.windows.net;" +
-        "loginTimeout=30;";
+        //String connectionString = "jdbc:sqlserver://://b00766612server.database.windows.net:1433;" + 
+        //"database=B00766612-examsample;" + 
+        //"user=examsampledatab@b00766612server;" + 
+        //"password=Clouddev01;" + 
+        //"encrypt=true;" + 
+        //"trustServerCertificate=false;" + 
+        //"hostNameInCertificate=*.database.windows.net;" +
+        //"loginTimeout=30;";
 
         //String connectionString = "jdbc:sqlserver://firstdatagill.database.windows.net:1433;" + 
         //"database=firstdatabasegill;" + 
@@ -43,6 +43,16 @@ public class MyUI extends UI {
         //"trustServerCertificate=false;" + 
         //"hostNameInCertificate=*.database.windows.net;" +
         //"loginTimeout=30;";
+
+        String connectionString = "jdbc:sqlserver://gillian2.database.windows.net:1433;" + 
+        "database=secondtestgill;" + 
+        "user=gillian@gillian2;" + 
+        "password=Clouddev1;" + 
+        "encrypt=true;" + 
+        "trustServerCertificate=false;" + 
+        "hostNameInCertificate=*.database.windows.net;" +
+        "loginTimeout=30;";
+
 
          // Create the connection object
         Connection connection = null;  
