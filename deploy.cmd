@@ -5,7 +5,8 @@
 :: MyAzure Deployment Script
 :: Version: 1.
 :: ----------------------
-
+cd D:\home\site\wwwroot\webapps\
+del *.war
 cd D:\home\site\repository\B00766612examsample\target\
 ::copy D:\home\site\repository\B00766612examsample\target\*.war D:\home\site\wwwroot\webapps\*.war
 ::copy D:\home\site\repository\B00766612examsample\target\*.war D:\home\site\wwwroot\webapps\*.war
