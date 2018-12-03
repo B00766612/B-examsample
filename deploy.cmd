@@ -2,8 +2,8 @@
  @echo off
 
 :: ----------------------
-:: MyAzure Deployment Script
-:: Version: 1.
+:: B00766612 MyAzure Deployment Script
+:: Version:4
 :: ----------------------
 
 del D:\home\site\wwwroot\webapps\*.war
@@ -13,5 +13,5 @@ cd D:\home\site\repository\B00766612examsample\target\
 ::%DEPLOYMENT_TARGET%\webapps\*.war
 ::rename *.war ROOT.war
 copy *.war D:\home\site\wwwroot\webapps\*.war
-::rename D:\home\site\wwwroot\webapps\*.war D:\home\site\wwwroot\webapps\ROOT.war
+rename D:\home\site\wwwroot\webapps\*.war D:\home\site\wwwroot\webapps\ROOT.war
 :: SET DEPLOYMENT_TARGET=%ARTIFACTS%\wwwroot\webapps
