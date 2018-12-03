@@ -69,7 +69,7 @@ public class MyUI extends UI {
 
         
         final TextField name = new TextField();
-        name.setCaption("Testing deploy:");
+        name.setCaption("Testing deploy...fully:");
 
         Button button = new Button("Click Me");
         button.addClickListener(e -> {
