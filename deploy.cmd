@@ -13,5 +13,6 @@ cd D:\home\site\repository\B00766612examsample\target\
 ::%DEPLOYMENT_TARGET%\webapps\*.war
 ::rename *.war ROOT.war
 copy *.war D:\home\site\wwwroot\webapps\*.war
-rename D:\home\site\wwwroot\webapps\*.war D:\home\site\wwwroot\webapps\ROOT.war
+cd D:\home\site\wwwroot\webapps\
+rename *.war ROOT.war
 :: SET DEPLOYMENT_TARGET=%ARTIFACTS%\wwwroot\webapps
