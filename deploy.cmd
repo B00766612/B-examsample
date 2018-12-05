@@ -7,9 +7,10 @@
 :: ----------------------
 
 del D:\home\site\wwwroot\webapps\*.war
-:: need to edit in app folder
+:: ----------------------
+:: need to edit app folder
 cd D:\home\site\repository\B00766612examsample\target\
-
+:: ----------------------
 copy *.war D:\home\site\wwwroot\webapps\*.war
 cd D:\home\site\wwwroot\webapps\
 rename *.war ROOT.war

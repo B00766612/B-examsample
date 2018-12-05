@@ -24,6 +24,8 @@ public class MyUI extends UI {
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         final VerticalLayout layout = new VerticalLayout();
+        HorizontalLayout horizontalLayout = new HorizontalLayout();
+
 //********************Database************************************* */
         //add connection String edit relevant
         
@@ -71,13 +73,39 @@ public class MyUI extends UI {
         final TextField name = new TextField();
         name.setCaption("Testing deploy...fully...last time:definetly");
 
-        Button button = new Button("Click Me");
+    
+        Label heading = new Label();
+        heading.setCaption("<H1>Marty Party Planners</H1>" +" <p/>"
+         +" <h3>Please enter the details below and click Book</h3>");
+         heading.setContentMode(com.vaadin.shared.ui.ContentMode.HTML);
+        
+        Label result= new Label();
+        result.setValue();
+
+        Label studentNo = new Label("B00766612");
+        
+
+        final TextField partyName= new TextField("Name of Party");
+        partyName.setMaxLength(25);
+        partyName.setPlaceholder("");
+
+        Slider people = new Slider("How many people are coming to this party", 1, 500);
+        people.setValue(500.0);
+        //people.setWidth(people.getMax()+"px");
+   
+        people.addValueChangeListener(e ->{
+            double noOfP = people.getValue();
+            //value.setValue(""+x);
+        });
+
+         Button button = new Button("BOOK");
         button.addClickListener(e -> {
             layout.addComponent(new Label("Thanks " + name.getValue() 
                     + ", it works!"));
         });
         
-        layout.addComponents(name, button);
+        horizontalLayout.addComponents(name, people);
+        layout.addComponents(heading, horizontalLayout, button, result, studentNo);
         
         setContent(layout);
     }
