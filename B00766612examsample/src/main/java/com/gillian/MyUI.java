@@ -6,10 +6,14 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
-import com.vaadin.ui.*;  //add imports
-import java.util.*; //add imports
-import java.sql.*;//add imports
-
+import com.vaadin.ui.Button;
+import com.vaadin.ui.Label;
+import com.vaadin.ui.TextField;
+import com.vaadin.ui.UI;
+import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;  //add imports//add imports
+import java.sql.Connection;
+import java.sql.DriverManager;
 
 /**
  * This UI is the application entry point. A UI may either represent a browser window 
@@ -24,7 +28,8 @@ public class MyUI extends UI {
     @Override
     protected void init(VaadinRequest vaadinRequest) {
         final VerticalLayout layout = new VerticalLayout();
-        HorizontalLayout horizontalLayout = new HorizontalLayout();
+        layout.setSpacing(true);
+        final HorizontalLayout horizontalLayout = new HorizontalLayout();
 
 //********************Database************************************* */
         //add connection String edit relevant
@@ -64,49 +69,46 @@ public class MyUI extends UI {
             // This will show an error message if something went wrong
             layout.addComponent(new Label(e.getMessage()));
         }
-        setContent(layout);
+        //setContent(layout);
     
 //********************End Database***********************************
 
-
-        
-        final TextField name = new TextField();
-        name.setCaption("Testing deploy...fully...last time:definetly");
-
+//********************Start Components******************** */
     
         Label heading = new Label();
-        heading.setCaption("<H1>Marty Party Planners</H1>" +" <p/>"
-         +" <h3>Please enter the details below and click Book</h3>");
-         heading.setContentMode(com.vaadin.shared.ui.ContentMode.HTML);
+        heading.setContentMode(com.vaadin.shared.ui.ContentMode.HTML);
+        heading.setValue("<H1>Marty Party Planners</H1>" +"<p/>"+
+        "<h3>Please enter the details below and click Book</h3>");
         
         Label result= new Label();
-        result.setValue();
+        result.setValue("Your party is not booked yet");
 
         Label studentNo = new Label("B00766612");
-        
 
         final TextField partyName= new TextField("Name of Party");
         partyName.setMaxLength(25);
         partyName.setPlaceholder("");
 
-        Slider people = new Slider("How many people are coming to this party", 1, 500);
-        people.setValue(500.0);
-        //people.setWidth(people.getMax()+"px");
-   
+        Slider people = new Slider("How many people are coming to this party", 0, 500);
+        people.setValue(0.0);
+        people.setWidth(people.getMax()+"px");
+    
         people.addValueChangeListener(e ->{
-            double noOfP = people.getValue();
-            //value.setValue(""+x);
+                double noPeople = people.getValue();
         });
+        
+        ComboBox <String> children = new ComboBox<String>("Children Attending?");
+        children.setItems("Yes", "No");
 
-         Button button = new Button("BOOK");
+        Button button = new Button("BOOK");
         button.addClickListener(e -> {
-            layout.addComponent(new Label("Thanks " + name.getValue() 
+            layout.addComponent(new Label("Thanks " + partyName.getValue() 
                     + ", it works!"));
         });
-        
-        horizontalLayout.addComponents(name, people);
+        //************ End of Components */
+        //****** Add Components to Layout */
+        horizontalLayout.addComponents(partyName, people, children);
         layout.addComponents(heading, horizontalLayout, button, result, studentNo);
-        
         setContent(layout);
     }
 
