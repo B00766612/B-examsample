@@ -26,7 +26,6 @@ public class MyUI extends UI {
     protected void init(VaadinRequest vaadinRequest) {
         final VerticalLayout layout = new VerticalLayout();
         layout.setSpacing(true);
-        final VerticalLayout grid = new VerticalLayout();
         final HorizontalLayout horizontalLayout = new HorizontalLayout();
 
 //********************Database************************************* */
@@ -68,7 +67,9 @@ public class MyUI extends UI {
 
 }
 // Add my component, grid is templated with Customer
+
 Grid<Party> partyGrid = new Grid<>();
+
 // Set the items (List)
 partyGrid.setItems(partys);
 // Configure the order and the caption of the grid
@@ -81,13 +82,13 @@ partyGrid.setSizeFull(); // This makes the grid the width of the page
   // This makes the grid 'multi-select', adds the checkboxes for selecting to the side
   partyGrid.setSelectionMode(SelectionMode.MULTI);
 
-  //partyGrid.addSelectionListener( e ->{
-    //  String sname= partyGrid,getPartyName;
+  partyGrid.addSelectionListener( e ->{
+Set <Party> selected= e.getAllSelectedItems();
+    //String sname= selected.getPartyName;
     //double sPeople = partyGrid.getPeople;
     //String sFeature= partyGrid.getFeature;
     //String sAlcohol= partyGrid.getAlcohol;
-//});
-  grid.addComponents(partyGrid);
+});
     
 //********************End Grid/ Database***********************************
 
@@ -166,15 +167,14 @@ partyGrid.setSizeFull(); // This makes the grid the width of the page
             }
 
 
-
-
             layout.addComponent(new Label("Thanks " + partyName.getValue() 
                     + ", it works!"));
         });
         //************ End of Components */
+
         //****** Add Components to Layout */
         horizontalLayout.addComponents(partyName, people, children);
-        layout.addComponents(heading, horizontalLayout, button, result, grid, studentNo);
+        layout.addComponents(heading, horizontalLayout, button, result, partyGrid, studentNo);
         setContent(layout);
     
 } //end try
