@@ -6,10 +6,10 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.*;  //add imports//add imports
 import java.sql.*;
 import java.util.*;
-import java.util.ArrayList;
 import com.vaadin.ui.Grid.SelectionMode;
 
 /**
@@ -80,16 +80,16 @@ partyGrid.addColumn(Party::getAlcohol).setCaption("Alcohol Allowed");
 partyGrid.setSizeFull(); // This makes the grid the width of the page
   // This makes the grid 'multi-select', adds the checkboxes for selecting to the side
   partyGrid.setSelectionMode(SelectionMode.MULTI);
+
+  //partyGrid.addSelectionListener( e ->{
+    //  String sname= partyGrid,getPartyName;
+    //double sPeople = partyGrid.getPeople;
+    //String sFeature= partyGrid.getFeature;
+    //String sAlcohol= partyGrid.getAlcohol;
+//});
   grid.addComponents(partyGrid);
-        } //end try
-        catch (Exception e) 
-        {
-            // This will show an error message if something went wrong
-            layout.addComponent(new Label(e.getMessage()));
-        }
-        //setContent(layout);
     
-//********************End Database***********************************
+//********************End Grid/ Database***********************************
 
 //********************Start Components******************** */
     
@@ -98,8 +98,7 @@ partyGrid.setSizeFull(); // This makes the grid the width of the page
         heading.setValue("<H1>Marty Party Planners</H1>" +"<p/>"+
         "<h3>Please enter the details below and click Book</h3>");
         
-        Label result= new Label();
-        result.setValue("Your party is not booked yet");
+        Label result= new Label("Your party is not booked yet", ContentMode.HTML);
 
         Label studentNo = new Label("B00766612");
 
@@ -118,8 +117,57 @@ partyGrid.setSizeFull(); // This makes the grid the width of the page
         ComboBox <String> children = new ComboBox<String>("Children Attending?");
         children.setItems("Yes", "No");
 
+        
         Button button = new Button("BOOK");
         button.addClickListener(e -> {
+            Boolean bookable= true;
+            //check grid selection
+            if(partyGrid.getSelectedItems().size() == 0)
+
+                {
+                    bookable=false;
+                    result.setValue("<strong>Please select at least one room!</strong>");
+                    return;
+                }
+            //check party name entried
+                if(partyName.getValue().length() == 0)
+                {
+                    bookable=false;
+                    result.setValue("<strong>Please enter party name.</strong>");
+                    return;
+                }
+            //check children selection
+            if(!children.getSelectedItem().isPresent())
+                {
+                    bookable=false;
+                    result.setValue("<strong>Please confirm if children attending your party</strong>");
+                    return;
+                }
+
+                //check children/alcohol
+                //if(children.getValue().equals("yes")&& Party.getAlcohol().equals("yes"))
+                //{
+                 //   result.setValue("<strong> You cannot select any rooms serving alcohol if children are attending.</strong>");
+                  //  return;
+                //}
+                //check capacity of room
+                //if(people.getValue()>))
+                //{
+                    //result.setValue("<strong> You have selected rooms with a max capacity of </strong>" + 100 + 
+                    //"<strong>which is not enough to hold </strong>" + people.getValue() + "</strong>.</strong>");
+                    //return;
+                //}
+
+                //all ok
+            if (bookable==true)
+            {
+                result.setValue("<h3>Success! The party is booked now</h3>");
+                return;
+            }
+
+
+
+
             layout.addComponent(new Label("Thanks " + partyName.getValue() 
                     + ", it works!"));
         });
@@ -128,7 +176,15 @@ partyGrid.setSizeFull(); // This makes the grid the width of the page
         horizontalLayout.addComponents(partyName, people, children);
         layout.addComponents(heading, horizontalLayout, button, result, grid, studentNo);
         setContent(layout);
-    }
+    
+} //end try
+catch (Exception e) 
+{
+    // This will show an error message if something went wrong
+    layout.addComponent(new Label(e.getMessage()));
+    setContent(layout);
+}
+}//class
 
     @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
     @VaadinServletConfiguration(ui = MyUI.class, productionMode = false)
