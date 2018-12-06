@@ -6,14 +6,11 @@ import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.*;  //add imports//add imports
-import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.*;
+import java.util.*;
+import java.util.ArrayList;
+import com.vaadin.ui.Grid.SelectionMode;
 
 /**
  * This UI is the application entry point. A UI may either represent a browser window 
@@ -29,20 +26,11 @@ public class MyUI extends UI {
     protected void init(VaadinRequest vaadinRequest) {
         final VerticalLayout layout = new VerticalLayout();
         layout.setSpacing(true);
+        final VerticalLayout grid = new VerticalLayout();
         final HorizontalLayout horizontalLayout = new HorizontalLayout();
 
 //********************Database************************************* */
         //add connection String edit relevant
-        
-
-        //String connectionString = "jdbc:sqlserver://firstdatagill.database.windows.net:1433;" + 
-        //"database=firstdatabasegill;" + 
-        //"user=gillian@firstdatagill;" + 
-        //"password=Clouddev123;" + 
-        //"encrypt=true;" + 
-        //"trustServerCertificate=false;" + 
-        //"hostNameInCertificate=*.database.windows.net;" +
-        //"loginTimeout=30;";
 
         String connectionString = "jdbc:sqlserver://gillian2.database.windows.net:1433;" + 
         "database=secondtestgill;" + 
@@ -63,7 +51,37 @@ public class MyUI extends UI {
             connection = DriverManager.getConnection(connectionString);
             // Add a label to the web app with the message and name of the database we connected to 
             layout.addComponent(new Label("Connected to database: " + connection.getCatalog()));
-        } 
+
+            ResultSet rs = connection.createStatement().executeQuery("SELECT * FROM PartyRooms;");
+            // Convert the resultset that comes back into a List -
+            // we need a Java class to represent the data (Party.java in this case)
+            List<Party> partys = new ArrayList<Party>();
+    // While there are more records in the resultset
+    while(rs.next())
+{   
+    // Add a new Customer instantiated with the fields from the record 
+    //(that we want, we might not want all the fields
+	partys.add(new Party(rs.getString("roomName"), 
+				rs.getInt("maxPeople"), 
+				rs.getString("alcohol"),
+                rs.getString("Feature")));
+
+}
+// Add my component, grid is templated with Customer
+Grid<Party> partyGrid = new Grid<>();
+// Set the items (List)
+partyGrid.setItems(partys);
+// Configure the order and the caption of the grid
+partyGrid.addColumn(Party::getPartyName).setCaption("Room");
+partyGrid.addColumn(Party::getPeople).setCaption("Capacity");
+partyGrid.addColumn(Party::getFeature).setCaption("Feature");
+partyGrid.addColumn(Party::getAlcohol).setCaption("Alcohol Allowed");
+
+partyGrid.setSizeFull(); // This makes the grid the width of the page
+  // This makes the grid 'multi-select', adds the checkboxes for selecting to the side
+  partyGrid.setSelectionMode(SelectionMode.MULTI);
+  grid.addComponents(partyGrid);
+        } //end try
         catch (Exception e) 
         {
             // This will show an error message if something went wrong
@@ -108,7 +126,7 @@ public class MyUI extends UI {
         //************ End of Components */
         //****** Add Components to Layout */
         horizontalLayout.addComponents(partyName, people, children);
-        layout.addComponents(heading, horizontalLayout, button, result, studentNo);
+        layout.addComponents(heading, horizontalLayout, button, result, grid, studentNo);
         setContent(layout);
     }
 
