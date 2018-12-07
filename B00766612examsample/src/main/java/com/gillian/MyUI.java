@@ -24,13 +24,14 @@ public class MyUI extends UI {
 
     @Override
     protected void init(VaadinRequest vaadinRequest) {
+
         final VerticalLayout layout = new VerticalLayout();
         layout.setSpacing(true);
         final HorizontalLayout horizontalLayout = new HorizontalLayout();
 
-//********************Database************************************* */
-        //add connection String edit relevant
+//********************Start loading Database and convert to Grid************************************* */
 
+        //add connection String edit relevant
         String connectionString = "jdbc:sqlserver://gillian2.database.windows.net:1433;" + 
         "database=secondtestgill;" + 
         "user=gillian@gillian2;" + 
@@ -44,6 +45,7 @@ public class MyUI extends UI {
          // Create the connection object
         Connection connection = null;  
 
+        //start try
         try 
         {
             // Connect with JDBC driver to a database
@@ -55,47 +57,47 @@ public class MyUI extends UI {
             // Convert the resultset that comes back into a List -
             // we need a Java class to represent the data (Party.java in this case)
             List<Party> partys = new ArrayList<Party>();
-    // While there are more records in the resultset
-    while(rs.next())
-{   
-    // Add a new Customer instantiated with the fields from the record 
-    //(that we want, we might not want all the fields
-	partys.add(new Party(rs.getString("roomName"), 
+    
+            // While there are more records in the resultset
+            while(rs.next()){   
+            // Add a new Customer instantiated with the fields from the record 
+            //(that we want, we might not want all the fields
+	        partys.add(new Party(rs.getString("roomName"), 
 				rs.getInt("maxPeople"), 
 				rs.getString("alcohol"),
                 rs.getString("Feature")));
 
-}
-// Add my component, grid is templated with Customer
+            } //end while
 
-Grid<Party> partyGrid = new Grid<>();
+        // Add my component, grid is templated
+        Grid<Party> partyGrid = new Grid<>();
 
-// Set the items (List)
-partyGrid.setItems(partys);
-// Configure the order and the caption of the grid
-partyGrid.addColumn(Party::getPartyName).setCaption("Room");
-partyGrid.addColumn(Party::getPeople).setCaption("Capacity");
-partyGrid.addColumn(Party::getFeature).setCaption("Feature");
-partyGrid.addColumn(Party::getAlcohol).setCaption("Alcohol Allowed");
+        // Set the items (List)
+        partyGrid.setItems(partys);
+        // Configure the order and the caption of the grid
+        partyGrid.addColumn(Party::getPartyName).setCaption("Room");
+        partyGrid.addColumn(Party::getPeople).setCaption("Capacity");
+        partyGrid.addColumn(Party::getFeature).setCaption("Feature");
+        partyGrid.addColumn(Party::getAlcohol).setCaption("Alcohol Allowed");
 
-partyGrid.setSizeFull(); // This makes the grid the width of the page
-  // This makes the grid 'multi-select', adds the checkboxes for selecting to the side
-  partyGrid.setSelectionMode(SelectionMode.MULTI);
+        partyGrid.setSizeFull(); // This makes the grid the width of the page
+        // This makes the grid 'multi-select', adds the checkboxes for selecting to the side
+        partyGrid.setSelectionMode(SelectionMode.MULTI);
 
-  partyGrid.addSelectionListener( e ->{
-Set <Party> selected= e.getAllSelectedItems();
-    //String sname= selected.getPartyName;
-    //double sPeople = partyGrid.getPeople;
-    //String sFeature= partyGrid.getFeature;
-    //String sAlcohol= partyGrid.getAlcohol;
-});
+        partyGrid.addSelectionListener( e ->{
+        Set <Party> selected= e.getAllSelectedItems();
+        //String sname= selected.getPartyName;
+        //double sPeople = partyGrid.getPeople;
+        //String sFeature= partyGrid.getFeature;
+        //String sAlcohol= partyGrid.getAlcohol;
+        });
     
 //********************End Grid/ Database***********************************
 
-//********************Start Components******************** */
+//********************Start other Components******************** */
     
         Label heading = new Label();
-        heading.setContentMode(com.vaadin.shared.ui.ContentMode.HTML);
+        heading.setContentMode(com.vaadin.shared.ui.ContentMode.HTML); //HTML
         heading.setValue("<H1>Marty Party Planners</H1>" +"<p/>"+
         "<h3>Please enter the details below and click Book</h3>");
         
@@ -110,23 +112,21 @@ Set <Party> selected= e.getAllSelectedItems();
         Slider people = new Slider("How many people are coming to this party", 0, 500);
         people.setValue(0.0);
         people.setWidth(people.getMax()+"px");
-    
         people.addValueChangeListener(e ->{
                 double noPeople = people.getValue();
         });
         
         ComboBox <String> children = new ComboBox<String>("Children Attending?");
         children.setItems("Yes", "No");
-
         
         Button button = new Button("BOOK");
         button.addClickListener(e -> {
-            Boolean bookable= true;
+            Boolean bookable= true;  //is it bookable?
             //check grid selection
             if(partyGrid.getSelectedItems().size() == 0)
 
                 {
-                    bookable=false;
+                    bookable=false; //not bookable
                     result.setValue("<strong>Please select at least one room!</strong>");
                     return;
                 }
@@ -170,12 +170,13 @@ Set <Party> selected= e.getAllSelectedItems();
             layout.addComponent(new Label("Thanks " + partyName.getValue() 
                     + ", it works!"));
         });
-        //************ End of Components */
+        //************ End of other Components and calculations******* */
 
-        //****** Add Components to Layout */
+        //------------ Add Components to Layout ------------------------/
         horizontalLayout.addComponents(partyName, people, children);
         layout.addComponents(heading, horizontalLayout, button, result, partyGrid, studentNo);
         setContent(layout);
+        //----------------------------------------------------------------
     
 } //end try
 catch (Exception e) 
@@ -183,7 +184,8 @@ catch (Exception e)
     // This will show an error message if something went wrong
     layout.addComponent(new Label(e.getMessage()));
     setContent(layout);
-}
+} //end catch
+
 }//class
 
     @WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
