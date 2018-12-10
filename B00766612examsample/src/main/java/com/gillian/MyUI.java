@@ -84,8 +84,9 @@ public class MyUI extends UI {
         // This makes the grid 'multi-select', adds the checkboxes for selecting to the side
         partyGrid.setSelectionMode(SelectionMode.MULTI);
         //Set <Party> selected= partyGrid.getSelectedItems();
-        partyGrid.addSelectionListener( e ->{
-        Set <Party> selected= e.getAllSelectedItems();});
+        /*partyGrid.addSelectionListener( e ->{
+        Set <Party> selected = e.getAllSelectedItems();
+            });
         
     
 //********************End Grid/ Database***********************************
@@ -117,7 +118,19 @@ public class MyUI extends UI {
         
         Button button = new Button("BOOK");
         button.addClickListener(e -> {
+            Set <Party> selected= partyGrid.getSelectedItems();
             Boolean bookable= true;  //is it bookable?
+            String isAlcohol="";
+            Integer arePeople=0;
+
+            
+            //grid selection
+            for(Party o : selected){
+                Notification.show("alcohol" + o.getAlcohol() + " capacity" +o.getPeople() + " children"+ children.getValue());
+                arePeople= o.getPeople();
+                isAlcohol= o.getAlcohol();
+            }//for
+
             //check grid selection
             if(partyGrid.getSelectedItems().size() == 0)
 
@@ -142,27 +155,22 @@ public class MyUI extends UI {
                 }
     
             //check children/alcohol
-            for(Party o : selected){
-                if ((o.getAlcohol() == "Yes")&&(children.getValue()=="Yes"))
+                if ((isAlcohol.equals("Yes"))&&(children.getValue().equals("Yes")))
                 { 
                     bookable=false;
                    result.setValue("<strong> You cannot select any rooms serving alcohol if children are attending.</strong>");
                     return;
                 }
-            } //for
-            
-                
-                //if(children.getValue().equals("yes")&& Party.getAlcohol().equals("yes"))
+           
                 
             //check capacity of room
-            for(Party o : selected){
-                if ((o.getPeople())>people.getValue())
+              if (arePeople>people.getValue())
                 { 
-                        bookable=false;
-                        result.setValue("<strong>You have selected rooms with a max capacity of 100 which is not enough to hold 300</strong>");
-                        return;
-                 }
-                }//for
+                     bookable=false;
+                     result.setValue("<strong>You have selected rooms with a max capacity of "+ arePeople+  "which is not enough to hold" +people.getValue() +"</strong>");
+                    return;
+                }
+                
 
                 //all ok
             if (bookable==true)
