@@ -83,10 +83,6 @@ public class MyUI extends UI {
         partyGrid.setSizeFull(); // This makes the grid the width of the page
         // This makes the grid 'multi-select', adds the checkboxes for selecting to the side
         partyGrid.setSelectionMode(SelectionMode.MULTI);
-        //Set <Party> selected= partyGrid.getSelectedItems();
-        /*partyGrid.addSelectionListener( e ->{
-        Set <Party> selected = e.getAllSelectedItems();
-            });
         
     
 //********************End Grid/ Database***********************************
@@ -164,7 +160,7 @@ public class MyUI extends UI {
            
                 
             //check capacity of room
-              if (arePeople>people.getValue())
+              if (arePeople<people.getValue())
                 { 
                      bookable=false;
                      result.setValue("<strong>You have selected rooms with a max capacity of "+ arePeople+  "which is not enough to hold" +people.getValue() +"</strong>");
