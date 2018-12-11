@@ -10,6 +10,8 @@ import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.*;  //add imports//add imports
 import java.sql.*;
 import java.util.*;
+import java.util.stream.Collectors;
+
 import com.vaadin.ui.Grid.SelectionMode;
 
 /**
@@ -114,18 +116,19 @@ public class MyUI extends UI {
         
         Button button = new Button("BOOK");
         button.addClickListener(e -> {
-            Set <Party> selected= partyGrid.getSelectedItems();
+            //Set <Party> selected= partyGrid.getSelectedItems();
+            MultiSelect <Party> selected = partyGrid.asMultiSelect();
             Boolean bookable= true;  //is it bookable?
-            String isAlcohol="";
-            Integer arePeople=0;
-
             
             //grid selection
-            for(Party o : selected){
-                Notification.show("alcohol" + o.getAlcohol() + " capacity" +o.getPeople() + " children"+ children.getValue());
-                arePeople= o.getPeople();
-                isAlcohol= o.getAlcohol();
-            }//for
+            //for(Party o : selected){
+                //Notification.show("alcohol" + o.getAlcohol() + " capacity" +o.getPeople() + " children"+ children.getValue());
+            
+                String isAlcohol = selected.getValue().stream().map(Party::getAlcohol).collect(Collectors.joining(","));
+                int arePeople = selected.getValue().stream().mapToInt(Party::getPeople).sum();
+                //arePeople= o.getPeople();
+                //isAlcohol= o.getAlcohol();
+            //}//for
 
             //check grid selection
             if(partyGrid.getSelectedItems().size() == 0)
