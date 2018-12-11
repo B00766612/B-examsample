@@ -105,9 +105,9 @@ public class MyUI extends UI {
         Slider people = new Slider("How many people are coming to this party", 0, 500);
         people.setValue(0.0);
         people.setWidth(people.getMax()+"px");
-        people.addValueChangeListener(e ->{
-                double noPeople = people.getValue();
-        });
+        //people.addValueChangeListener(e ->{
+          //      double noPeople = people.getValue();
+        //});
         
         ComboBox <String> children = new ComboBox<String>("Children Attending?");
         children.setItems("Yes", "No");
@@ -129,7 +129,6 @@ public class MyUI extends UI {
 
             //check grid selection
             if(partyGrid.getSelectedItems().size() == 0)
-
                 {
                     bookable=false; //not bookable
                     result.setValue("<strong>Please select at least one room!</strong>");
@@ -138,14 +137,14 @@ public class MyUI extends UI {
             //check party name entried
                 if(partyName.getValue().length() == 0)
                 {
-                    bookable=false;
+                    bookable=false; //not bookable
                     result.setValue("<strong>Please enter party name.</strong>");
                     return;
                 }
             //check children selection
             if(!children.getSelectedItem().isPresent())
                 {
-                    bookable=false;
+                    bookable=false; //not bookable
                     result.setValue("<strong>Please confirm if children attending your party</strong>");
                     return;
                 }
@@ -153,7 +152,7 @@ public class MyUI extends UI {
             //check children/alcohol
                 if ((isAlcohol.equals("Yes"))&&(children.getValue().equals("Yes")))
                 { 
-                    bookable=false;
+                    bookable=false; //not bookable
                    result.setValue("<strong> You cannot select any rooms serving alcohol if children are attending.</strong>");
                     return;
                 }
@@ -162,13 +161,13 @@ public class MyUI extends UI {
             //check capacity of room
               if (arePeople<people.getValue())
                 { 
-                     bookable=false;
-                     result.setValue("<strong>You have selected rooms with a max capacity of "+ arePeople+  "which is not enough to hold" +people.getValue() +"</strong>");
+                     bookable=false; //not bookable
+                     result.setValue("<strong>You have selected rooms with a max capacity of "+ arePeople+  "which is not enough to hold" +people.getValue().intValue() +"</strong>");
                     return;
                 }
                 
 
-                //all ok
+            //all ok
             if (bookable==true)
             {
                 result.setValue("<h3>Success! The party is booked now</h3>");
