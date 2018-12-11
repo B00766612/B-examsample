@@ -11,6 +11,7 @@ import com.vaadin.ui.*;  //add imports//add imports
 import java.sql.*;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.function.Predicate;
 
 import com.vaadin.ui.Grid.SelectionMode;
 
@@ -85,6 +86,7 @@ public class MyUI extends UI {
         partyGrid.setSizeFull(); // This makes the grid the width of the page
         // This makes the grid 'multi-select', adds the checkboxes for selecting to the side
         partyGrid.setSelectionMode(SelectionMode.MULTI);
+        MultiSelect <Party> selected = partyGrid.asMultiSelect();
         
     
 //********************End Grid/ Database***********************************
@@ -117,16 +119,20 @@ public class MyUI extends UI {
         Button button = new Button("BOOK");
         button.addClickListener(e -> {
             //Set <Party> selected= partyGrid.getSelectedItems();
-            MultiSelect <Party> selected = partyGrid.asMultiSelect();
+            //MultiSelect <Party> selected = partyGrid.asMultiSelect();
             Boolean bookable= true;  //is it bookable?
+           // Integer arePeople;
+            //String isAlcohol;
             
             //grid selection
             //for(Party o : selected){
-                //Notification.show("alcohol" + o.getAlcohol() + " capacity" +o.getPeople() + " children"+ children.getValue());
+               // Notification.show("alcohol" + o.getAlcohol() + " capacity" +o.getPeople() + " children"+ children.getValue());
             
+                //String isAlcohol = selected.getValue().stream().map(Party::getAlcohol).collect(Collectors.joining(","));
                 String isAlcohol = selected.getValue().stream().map(Party::getAlcohol).collect(Collectors.joining(","));
                 int arePeople = selected.getValue().stream().mapToInt(Party::getPeople).sum();
-                //arePeople= o.getPeople();
+                String yesAlco= "Yes";
+                //arePeople= o.getPeople().sum();
                 //isAlcohol= o.getAlcohol();
             //}//for
 
@@ -153,7 +159,8 @@ public class MyUI extends UI {
                 }
     
             //check children/alcohol
-                if ((isAlcohol.equals("Yes"))&&(children.getValue().equals("Yes")))
+                //if ((isAlcohol.equals(yesAlco))&&(children.getValue().equals("Yes")))
+                if ((children.getValue() == "Yes") && (isAlcohol.equalsIgnoreCase(yesAlco)))
                 { 
                     bookable=false; //not bookable
                    result.setValue("<strong> You cannot select any rooms serving alcohol if children are attending.</strong>");
@@ -165,7 +172,7 @@ public class MyUI extends UI {
               if (arePeople<people.getValue())
                 { 
                      bookable=false; //not bookable
-                     result.setValue("<strong>You have selected rooms with a max capacity of "+ arePeople+  "which is not enough to hold" +people.getValue().intValue() +"</strong>");
+                     result.setValue("<strong>You have selected rooms with a max capacity of "+ arePeople+  " which is not enough to hold " +people.getValue().intValue() +"</strong>");
                     return;
                 }
                 
